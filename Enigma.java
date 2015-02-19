@@ -1,16 +1,37 @@
-// TODO: put your file header here
-
+///////////////////////////////////////////////////////////////////////////////
+//                   ALL STUDENTS COMPLETE THESE SECTIONS
+// Title:            Enigma
+// Files:            Enigma.java
+// Semester:         CS302 Spring 2015
+//
+// Author:           Jason Chan
+// Email:            cchan42@wisc.edu
+// CS Login:         jchan
+// Lecturer's Name:  Deb Deppler
+// Lab Section:      
+//
+//////////////////// PAIR PROGRAMMERS COMPLETE THIS SECTION ////////////////////
+//
+//                   CHECK ASSIGNMENT PAGE TO see IF PAIR-PROGRAMMING IS ALLOWED
+//                   If pair programming is allowed:
+//                   1. Read PAIR-PROGRAMMING policy (in cs302 policy) 
+//                   2. choose a partner wisely
+//                   3. REGISTER THE TEAM BEFORE YOU WORK TOGETHER 
+//                      a. one partner creates the team
+//                      b. the other partner must join the team
+//                   4. complete this section for each program file.
+//
+// Pair Partner:     Alex Politowicz
+// Email:            
+// CS Login:         
+//
+//////////////////////////// 80 columns wide //////////////////////////////////
 import java.util.*;
 
 /**
  * Simulate the encryption of messages that was performed by the 
  * World War II-era German Enigma cipher machine.
  * 
- * <ul><li><a href="http://en.wikipedia.org/wiki/Enigma_machine" target="wiki">
- * http://en.wikipedia.org/wiki/Enigma_machine</a></li>
- * <li><a href="https://www.youtube.com/watch?v=G2_Q9FoD-oQ" target="youtube">
- * https://www.youtube.com/watch?v=G2_Q9FoD-oQ</a></li>
- * </ul>
  */
 public class Enigma {
 
@@ -30,7 +51,31 @@ public class Enigma {
 	public static void main( String [] args ) {
 
 		// TODO left to the student
-
+		
+		// Welcome
+		System.out.println("Willkommen auf der Enigma-Maschine");
+		System.out.println("Please enter a Rotor Configuration.");
+		System.out.print("This must be a list of numbers in the ");
+		System.out.print("range from 0 to "+RotorConstants.ROTORS.length);
+		System.out.println(", separated by spaces.");
+		System.out.println("Note that rotor 0 is the identity rotor.");
+		
+		// Declare variables
+		Scanner stdin = new Scanner(System.in);	// Create scanner object
+		String input = "";
+		String text = "";
+		
+		// take the input
+		input = stdin.nextLine();
+		
+		// parse and check the input
+		parseRotorIndices(input);
+		
+		// Give instruction. start deconding
+		System.out.println("Enter lines of text to be encoded:");
+		
+		
+		
 		/* 
 		 * Hint: This is where you should put your welcome messages, 
 		 * the configuration prompt, and most importantly, 
@@ -91,12 +136,42 @@ public class Enigma {
 	 */
 	public static int [] parseRotorIndices( String rotorIndicesLine ) {
 
-		// TODO left to the student
+		int[] inputs = new int[RotorConstants.ROTORS.length];
+		int input_length = 0;
 		
-		// CAUTION: Do not hard code values, we can (and will) change the
-		// RotorConstants class. So, you must use those constant names
-		// and not the values themselves to ensure your code will work
-		// with different versions of those constants.
+		// TODO left to the student
+		Scanner parser = new Scanner(rotorIndicesLine);
+		if( rotorIndicesLine.length() == 0){
+			System.out.println("You must specify at least one rotor.");
+			System.exit(-1);
+		}else{
+			// saves all the input and checks for invalid rotors
+			while( parser.hasNextInt()){
+				int nextInt = parser.nextInt();
+				if( nextInt < RotorConstants.ROTORS.length 
+						&& nextInt >= 0){
+					inputs[input_length] = nextInt;
+				input_length++;
+				}else{
+					System.out.print("Invalid rotor. ");
+					System.out.print("You must enter an integer between 0 and ");
+					System.out.println(RotorConstants.ROTORS.length + ".");
+					System.exit(-1);
+				}
+			}
+			
+			//loop through input to check for duplicates
+			for( int i = 0; i<input_length; i++){
+				for( int j = 0; j < input_length; j++){
+					if( inputs[j] == inputs[i] && i != j){
+						System.out.println("You cannot use the same rotor twice.");
+						System.exit(-1);
+					}
+				}
+			}
+			
+			
+		}
 		return null;
 	}
 
