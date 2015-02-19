@@ -6,6 +6,11 @@ import java.util.*;
  * Simulate the encryption of messages that was performed by the 
  * World War II-era German Enigma cipher machine.
  * 
+ * <ul><li><a href="http://en.wikipedia.org/wiki/Enigma_machine" target="wiki">
+ * http://en.wikipedia.org/wiki/Enigma_machine</a></li>
+ * <li><a href="https://www.youtube.com/watch?v=G2_Q9FoD-oQ" target="youtube">
+ * https://www.youtube.com/watch?v=G2_Q9FoD-oQ</a></li>
+ * </ul>
  */
 public class Enigma {
 
