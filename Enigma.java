@@ -335,7 +335,10 @@ public class Enigma {
 	public static char encode( int [][] rotors, int [] reflector, char input ) {
 
 		// TODO left to the student
-
+		int input_index = input - 65;
+		int out_raw = 
+		
+		
 		return 0;
 
 	}
