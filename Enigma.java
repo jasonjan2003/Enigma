@@ -73,20 +73,23 @@ public class Enigma {
 		
 		// rotorsInUse
 		int[][] rotorsInUse = setUpRotors(rotorIndices);
-		for( int i=0;i<rotorsInUse.length;i++){
-			System.out.print("\n\t"+i+": ");
-			for(int j=0;j<rotorsInUse[i].length;j++)
-				System.out.print(rotorsInUse[i][j]+" ");
-		}
+		
+		// reflector rotor
+		int[] reflectorRotor = convertRotor(RotorConstants.REFLECTOR);
 		
 		// Give instruction. start deconding
 		System.out.println("Enter lines of text to be encoded:");
 		while( true){
 			
-			//text = stdin.nextLine();
-			int[] reflectorRotor = convertRotor(RotorConstants.REFLECTOR);
-			for(int i = 0; i<reflectorRotor.length; i++)
-				System.out.print(reflectorRotor[i] + " ");
+			text = stdin.nextLine().toUpperCase();
+			for( int k=0; k<text.length(); k++){
+				char encoded = 0;
+				if( text.charAt(k) <='Z' && text.charAt(k) >= 'A' )
+					encoded = encode(rotorsInUse, reflectorRotor, text.charAt(k));
+				else
+					encoded = text.charAt(k);
+				System.out.print(encoded);
+			}
 		}
 		
 		
@@ -336,10 +339,25 @@ public class Enigma {
 
 		// TODO left to the student
 		int input_index = input - 65;
-		int out_raw = 
+		char output =  0;
 		
+		// forward encoding
+		for( int i = 0; i < rotors.length; i++){
+			input_index = rotors[i][input_index];
+		}
 		
-		return 0;
+		// add reflector
+		int[] reflectorRotor = convertRotor(RotorConstants.REFLECTOR);
+		input_index = reflectorRotor[input_index];
+		
+		// reverse encoding
+		for( int i = rotors.length; i >0; i--){
+			input_index = rotors[i-1][input_index];
+		}
+		
+		output = (char) (input_index + 65);
+		
+		return output;
 
 	}
 
