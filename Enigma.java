@@ -73,7 +73,13 @@ public class Enigma {
 		
 		// Give instruction. start deconding
 		System.out.println("Enter lines of text to be encoded:");
-		
+		while( true){
+			
+			//text = stdin.nextLine();
+			int[] reflectorRotor = convertRotor(RotorConstants.REFLECTOR);
+			for(int i = 0; i<reflectorRotor.length; i++)
+				System.out.print(reflectorRotor[i] + " ");
+		}
 		
 		
 		/* 
@@ -259,9 +265,13 @@ public class Enigma {
 	 */
 	public static int [] convertRotor( String rotorText ) {
 
-		// TODO left to the student
-
-		return null;
+		// returning variable
+		int[] mapped_result = new int[rotorText.length()];
+		
+		for( int i = 0; i < rotorText.length(); i++){
+			mapped_result[i] = (rotorText.charAt(i) - 65);
+		}
+		return mapped_result;
 	}
 
 	/**
