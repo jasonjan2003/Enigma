@@ -69,7 +69,15 @@ public class Enigma {
 		input = stdin.nextLine();
 		
 		// parse and check the input
-		parseRotorIndices(input);
+		int[] rotorIndices = parseRotorIndices(input);
+		
+		// rotorsInUse
+		int[][] rotorsInUse = setUpRotors(rotorIndices);
+		for( int i=0;i<rotorsInUse.length;i++){
+			System.out.print("\n\t"+i+": ");
+			for(int j=0;j<rotorsInUse[i].length;j++)
+				System.out.print(rotorsInUse[i][j]+" ");
+		}
 		
 		// Give instruction. start deconding
 		System.out.println("Enter lines of text to be encoded:");
@@ -144,6 +152,7 @@ public class Enigma {
 
 		int[] inputs = new int[RotorConstants.ROTORS.length];
 		int input_length = 0;
+		int[] inputs_result = new int[1];
 		
 		// TODO left to the student
 		Scanner parser = new Scanner(rotorIndicesLine);
@@ -157,7 +166,7 @@ public class Enigma {
 				if( nextInt < RotorConstants.ROTORS.length 
 						&& nextInt >= 0){
 					inputs[input_length] = nextInt;
-				input_length++;
+					input_length++;
 				}else{
 					System.out.print("Invalid rotor. ");
 					System.out.print("You must enter an integer between 0 and ");
@@ -165,6 +174,8 @@ public class Enigma {
 					System.exit(-1);
 				}
 			}
+			
+			inputs_result = new int[input_length];
 			
 			//loop through input to check for duplicates
 			for( int i = 0; i<input_length; i++){
@@ -174,11 +185,11 @@ public class Enigma {
 						System.exit(-1);
 					}
 				}
+				inputs_result[i] = inputs[i];
 			}
 			
-			
 		}
-		return null;
+		return inputs_result;
 	}
 
 	/**
@@ -201,11 +212,17 @@ public class Enigma {
 	public static int [][] setUpRotors( int [] rotorIndices ) {
 
 		// TODO left to the student
-		
+		int[][] result = new int[rotorIndices.length][26];
+		for( int i=0; i < rotorIndices.length; i++){
+			String rotor = (RotorConstants.ROTORS)[rotorIndices[i]];
+			int[] rotorConverted = convertRotor( rotor);
+			for( int j=0; j<26; j++)
+				result[i][j] = rotorConverted[j];
+		}
 		// Hint: Access the rotor ciphers contained in RotorConstants, 
 		// and convert them into integral form by calling convertRotor().
 
-		return null;
+		return result;
 	}
 
 	/**
