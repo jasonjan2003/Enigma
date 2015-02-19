@@ -77,6 +77,12 @@ public class Enigma {
 		// reflector rotor
 		int[] reflectorRotor = convertRotor(RotorConstants.REFLECTOR);
 		
+		// rotor notches
+		int[][] rotorNotches = getRotorNotches(rotorIndices);
+		
+		// rotorOffsets
+		int[] rotorOffsets = new int[rotorIndices.length];
+			
 		// Give instruction. start deconding
 		System.out.println("Enter lines of text to be encoded:");
 		while( true){
@@ -92,22 +98,6 @@ public class Enigma {
 			}
 		}
 		
-		
-		/* 
-		 * Hint: This is where you should put your welcome messages, 
-		 * the configuration prompt, and most importantly, 
-		 * your main program loop. 
-		 * This is also the place where you should declare and use 
-		 * the "Suggested Data Structures" from the P2 Specifications Page.
-		 */
-
-
-		/* 
-		 * Caution: When calling other methods, you must follow the 
-		 * requirements of each method as it is defined. For example, 
-		 * never call encode() with a non-upper-case character because 
-		 * the encode() method requires lowercase characters. 
-		 */
 
 	}
 
@@ -121,7 +111,13 @@ public class Enigma {
 	 */
 	public static void rotate( int [] rotor ) {
 		
-		// TODO left to the student
+		// TO.DO left to the student
+		int first = rotor[0];
+		
+		for( int i=0; i<RotorConstants.ROTOR_LENGTH-1; i++){
+			rotor[i] = rotor[i+1];
+		}
+		rotor[RotorConstants.ROTOR_LENGTH-1] = first;
 
 	}
 
@@ -157,7 +153,7 @@ public class Enigma {
 		int input_length = 0;
 		int[] inputs_result = new int[1];
 		
-		// TODO left to the student
+		// TO.DO left to the student
 		Scanner parser = new Scanner(rotorIndicesLine);
 		if( rotorIndicesLine.length() == 0){
 			System.out.println("You must specify at least one rotor.");
@@ -173,7 +169,7 @@ public class Enigma {
 				}else{
 					System.out.print("Invalid rotor. ");
 					System.out.print("You must enter an integer between 0 and ");
-					System.out.println(RotorConstants.ROTORS.length + ".");
+					System.out.println(RotorConstants.ROTORS.length-1 + ".");
 					System.exit(-1);
 				}
 			}
@@ -214,17 +210,15 @@ public class Enigma {
 	 */
 	public static int [][] setUpRotors( int [] rotorIndices ) {
 
-		// TODO left to the student
-		int[][] result = new int[rotorIndices.length][26];
+		// TO.DO left to the student
+		int[][] result = new int[rotorIndices.length][RotorConstants.ROTOR_LENGTH];
 		for( int i=0; i < rotorIndices.length; i++){
 			String rotor = (RotorConstants.ROTORS)[rotorIndices[i]];
 			int[] rotorConverted = convertRotor( rotor);
 			for( int j=0; j<26; j++)
 				result[i][j] = rotorConverted[j];
 		}
-		// Hint: Access the rotor ciphers contained in RotorConstants, 
-		// and convert them into integral form by calling convertRotor().
-
+		
 		return result;
 	}
 
@@ -256,9 +250,13 @@ public class Enigma {
 	 */
 	public static int [][] getRotorNotches( int[] rotorIndices ) {
 
-		// TODO left to the student
-
-		return null;
+		// TO.DO left to the student
+		int rotorIndices_length = rotorIndices.length;
+		int[][] notch_list = new int[rotorIndices_length][];
+		for( int i = 0; i<rotorIndices_length; i++){
+			notch_list[i] = RotorConstants.NOTCHES[rotorIndices[i]];
+		}
+		return notch_list;
 	}
 
 	/**
@@ -286,9 +284,9 @@ public class Enigma {
 	public static int [] convertRotor( String rotorText ) {
 
 		// returning variable
-		int[] mapped_result = new int[rotorText.length()];
+		int[] mapped_result = new int[RotorConstants.ROTOR_LENGTH];
 		
-		for( int i = 0; i < rotorText.length(); i++){
+		for( int i = 0; i < RotorConstants.ROTOR_LENGTH; i++){
 			mapped_result[i] = (rotorText.charAt(i) - 65);
 		}
 		return mapped_result;
@@ -337,7 +335,7 @@ public class Enigma {
 	 */
 	public static char encode( int [][] rotors, int [] reflector, char input ) {
 
-		// TODO left to the student
+		// TO.DO left to the student
 		int input_index = input - 65;
 		char output =  0;
 		
@@ -347,8 +345,7 @@ public class Enigma {
 		}
 		
 		// add reflector
-		int[] reflectorRotor = convertRotor(RotorConstants.REFLECTOR);
-		input_index = reflectorRotor[input_index];
+		input_index = reflector[input_index];
 		
 		// reverse encoding
 		for( int i = rotors.length; i >0; i--){
@@ -411,6 +408,17 @@ public class Enigma {
 			int [][] rotorNotches)
 	{
 		// TODO left to the student
+		rotate(rotors[0]);
+		rotorOffsets[0]++;
+		for( int i = 0; i<rotors.length; i++){
+			for( int j = 0; j<rotorNotches[i].length; j++){
+				if( rotorOffsets[i] == rotorNotches[i][j]){
+					rotate(rotors[i]);
+					rotorOffsets[i]++;
+				}
+			}
+			
+		}
 
 		/*
 		 * Hint: call rotate() to rotate a rotor. 
