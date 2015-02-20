@@ -83,19 +83,26 @@ public class Enigma {
 		// rotorOffsets
 		int[] rotorOffsets = new int[rotorIndices.length];
 			
-		// Give instruction. start deconding
+		// Give instruction. start decoding
 		System.out.println("Enter lines of text to be encoded:");
 		while( true){
 			
 			text = stdin.nextLine().toUpperCase();
+			System.out.print("Encoded result: ");
 			for( int k=0; k<text.length(); k++){
 				char encoded = 0;
-				if( text.charAt(k) <='Z' && text.charAt(k) >= 'A' )
+				if( text.charAt(k) <='Z' && text.charAt(k) >= 'A' ){
 					encoded = encode(rotorsInUse, reflectorRotor, text.charAt(k));
-				else
+					advance(rotorsInUse, rotorOffsets, rotorNotches);
+				}else
 					encoded = text.charAt(k);
 				System.out.print(encoded);
+				for( int i=0; i<rotorOffsets.length; i++){
+					//System.out.println("Rotor at index "+i+":\t"+rotorOffsets[i]);
+				}
+				
 			}
+			System.out.println();
 		}
 		
 
@@ -341,15 +348,27 @@ public class Enigma {
 		
 		// forward encoding
 		for( int i = 0; i < rotors.length; i++){
+			//System.out.print(input_index+"->");
 			input_index = rotors[i][input_index];
+			//System.out.print(input_index+", ");
 		}
 		
 		// add reflector
+		//System.out.print(input_index+"->");
 		input_index = reflector[input_index];
+		//System.out.print(input_index+", ");
 		
 		// reverse encoding
 		for( int i = rotors.length; i >0; i--){
-			input_index = rotors[i-1][input_index];
+			//System.out.print(input_index+"->");
+			//input_index = rotors[i-1][input_index];
+			for( int j=0; j<RotorConstants.ROTOR_LENGTH; j++){
+				if( input_index == rotors[i-1][j]){
+					input_index = j;
+					break;
+				}
+			}
+			//System.out.println(input_index+", ");
 		}
 		
 		output = (char) (input_index + 65);
@@ -408,17 +427,24 @@ public class Enigma {
 			int [][] rotorNotches)
 	{
 		// TODO left to the student
-		rotate(rotors[0]);
-		rotorOffsets[0]++;
-		for( int i = 0; i<rotors.length; i++){
-			for( int j = 0; j<rotorNotches[i].length; j++){
+
+		checkrotors:
+		for( int i=0; i<rotors.length; i++ ){
+			rotate(rotors[i]);
+			if(rotorOffsets[i] == RotorConstants.ROTOR_LENGTH-1)
+				rotorOffsets[i] = 0;
+			else
+				rotorOffsets[i]++;
+			boolean reached_notch = false;
+			for( int j=0; j<rotorNotches[i].length; j++){
 				if( rotorOffsets[i] == rotorNotches[i][j]){
-					rotate(rotors[i]);
-					rotorOffsets[i]++;
+					reached_notch = true;
 				}
 			}
-			
+			if( !reached_notch)
+				break checkrotors;
 		}
+		
 
 		/*
 		 * Hint: call rotate() to rotate a rotor. 
